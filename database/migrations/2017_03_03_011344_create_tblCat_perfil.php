@@ -12,7 +12,11 @@ class CreateTblCatPerfil extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('tblCat_Perfil', function (Blueprint $table) {
+            $table->increments('fi_IdCatPerfil');
+            $table->string('fc_NombrePerfil',50);
+            $table->tinyInteger('fb_Activo');
+        });
     }
 
     /**

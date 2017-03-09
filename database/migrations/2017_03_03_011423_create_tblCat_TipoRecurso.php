@@ -12,7 +12,11 @@ class CreateTblCatTipoRecurso extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_TipoRecurso', function (Blueprint $table) {
+          $table->increments('fi_IdCatTipoRecurso');
+          $table->string('fc_TipoRecurso',150);
+          $table->tinyInteger('fb_Activo');
+      });
     }
 
     /**

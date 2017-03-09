@@ -12,7 +12,18 @@ class CreateTblCatPlaneacion extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_Planeacion', function (Blueprint $table) {
+          $table->increments('fi_IdOpePlaneacionUsuario');
+          $table->string('fc_NombrePlaneacion',150);
+          $table->tinyInteger('fb_Activo');
+          $table->integer('fi_NumLiberacion');
+          $table->string('fc_UrlArchivo',150);
+          $table->softDeletes();
+          $table->integer('fi_IdCnfCompetencia')->unsigned();
+          $table->string('fc_UrlPortada',150);
+          $table->foreign('fi_IdCnfCompetencia')->references('fi_IdCnfCompetencia')->on('tblCnf_Competencia');
+
+      });
     }
 
     /**

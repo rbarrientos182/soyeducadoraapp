@@ -12,7 +12,11 @@ class CreateTblCatDiagnosticoPropio extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_DiagnosticoPropio', function (Blueprint $table) {
+          $table->increments('fi_IdCatDiagnosticoPropio');
+          $table->integer('fi_NumeroPregunta');
+          $table->string('fc_Pregunta',150);
+      });
     }
 
     /**

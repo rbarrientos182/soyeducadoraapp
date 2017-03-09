@@ -12,7 +12,14 @@ class CreateTblCatEvaluacion extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_Evaluacion', function (Blueprint $table) {
+          $table->increments('fi_IdCatEvaluacion');
+          $table->integer('fi_NumeroPregunta');
+          $table->string('fc_Pregunta',150);
+          $table->softDeletes();
+          $table->integer('fi_IdCatPlaneacion')->unsigned();
+          $table->foreign('fi_IdCatPlaneacion')->references('fi_IdCatPlaneacion')->on('tblCat_Planeacion');
+      });
     }
 
     /**

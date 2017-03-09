@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblOpePruebaEdiAlumno extends Migration
+class CreateTblOpeEvaluacionAlumno extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,15 @@ class CreateTblOpePruebaEdiAlumno extends Migration
      */
     public function up()
     {
-      Schema::create('tblOpe_PruebaEdiAlumno', function (Blueprint $table) {
-          $table->increments('fi_IdOpePruebaEdiAlumno');
+      Schema::create('tblOpe_EvaluacionAlumno', function (Blueprint $table) {
+          $table->increments('fi_IdOpeEvaluacionAlumno');
           $table->integer('fi_Respuesta');
           $table->softDeletes();
-          $table->integer('fi_IdCatPruebaEdi')->unsigned();
+          $table->integer('fi_IdCatEvaluacionPropia')->nullable()->unsigned();
+          $table->integer('fi_IdCatEvaluacion')->nullable()->unsigned();
           $table->integer('fi_IdCnfAlumnoGrupo')->unsigned();
-          $table->foreign('fi_IdCatPruebaEdi')->references('fi_IdCatPruebaEdi')->on('tblCat_PruebaEdi');
+          $table->foreign('fi_IdCatEvaluacionPropia')->references('fi_IdCatEvaluacionPropia')->on('tblCat_EvaluacionPropia');
+          $table->foreign('fi_IdCatEvaluacion')->references('fi_IdCatEvaluacion')->on('tblCat_Evaluacion');
           $table->foreign('fi_IdCnfAlumnoGrupo')->references('fi_IdCnfAlumnoGrupo')->on('tblCnf_AlumnoGrupo');
       });
     }

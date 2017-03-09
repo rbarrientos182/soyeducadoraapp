@@ -12,7 +12,11 @@ class CreateTblCnfModeloEducativo extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCnf_ModeloEducativo', function (Blueprint $table) {
+          $table->increments('fi_IdCnfModeloEducativo');
+          $table->string('fc_ModeloEducativo',150);
+          $table->tinyInteger('fb_Activo');
+      });
     }
 
     /**

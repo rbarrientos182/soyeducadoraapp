@@ -12,7 +12,10 @@ class CreateTblCatEstado extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_Estado', function (Blueprint $table) {
+          $table->increments('fi_IdCatEstado');
+          $table->integer('fc_NombreEstado');
+      });
     }
 
     /**

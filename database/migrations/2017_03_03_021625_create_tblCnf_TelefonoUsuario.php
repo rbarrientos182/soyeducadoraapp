@@ -12,7 +12,14 @@ class CreateTblCnfTelefonoUsuario extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCnf_TelefonoUsuario', function (Blueprint $table) {
+          $table->increments('fi_IdCnfTelefonoUsuario');
+          $table->softDeletes();
+          $table->integer('fi_IdOpeUsuario')->unsigned();
+          $table->integer('fi_IdCatTelefono')->unsigned();
+          $table->foreign('fi_IdOpeUsuario')->references('fi_IdOpeUsuario')->on('tblOpe_Usuario');
+          $table->foreign('fi_IdCatTelefono')->references('fi_IdCatTelefono')->on('tblCat_Telefono');
+      });
     }
 
     /**

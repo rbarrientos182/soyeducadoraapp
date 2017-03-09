@@ -12,7 +12,11 @@ class CreateTblCatPais extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_Pais', function (Blueprint $table) {
+          $table->increments('fi_IdCatPais');
+          $table->string('fc_NombrePais',50);
+          $table->tinyInteger('fb_Finalizada');
+      });
     }
 
     /**

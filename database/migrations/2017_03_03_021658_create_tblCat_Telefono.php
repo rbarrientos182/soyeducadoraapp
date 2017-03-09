@@ -12,7 +12,12 @@ class CreateTblCatTelefono extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_Telefono', function (Blueprint $table) {
+          $table->increments('fi_IdCatTelefono');
+          $table->string('fc_NumTelefono',45);
+          $table->string('fc_TipoTelefono',45);
+          $table->tinyInteger('fb_Activo');
+      });
     }
 
     /**

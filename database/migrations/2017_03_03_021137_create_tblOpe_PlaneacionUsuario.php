@@ -12,7 +12,18 @@ class CreateTblOpePlaneacionUsuario extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblOpe_PlaneacionUsuario', function (Blueprint $table) {
+          $table->increments('fi_IdOpePlaneacionUsuario');
+          $table->date('fd_FechaDesde');
+          $table->date('fd_FechaHasta');
+          $table->tinyInteger('fb_Finalizada');
+          $table->softDeletes();
+          $table->integer('fi_IdCatPlaneacion')->unsigned();
+          $table->integer('fi_IdOpeUsuario')->unsigned();
+          $table->foreign('fi_IdCatPlaneacion')->references('fi_IdCatPlaneacion')->on('tblCat_Planeacion');
+          $table->foreign('fi_IdOpeUsuario')->references('fi_IdOpeUsuario')->on('tblOpe_Usuario');
+
+      });
     }
 
     /**

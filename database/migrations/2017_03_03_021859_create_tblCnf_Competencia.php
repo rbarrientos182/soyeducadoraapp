@@ -12,7 +12,14 @@ class CreateTblCnfCompetencia extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCnf_Competencia', function (Blueprint $table) {
+          $table->increments('fi_IdCnfCompetencia');
+          $table->string('fc_Competencia',150);
+          $table->tinyInteger('fb_Activo');
+          $table->softDeletes();
+          $table->integer('fi_IdCnfCampoFormativo')->unsigned();
+          $table->foreign('fi_IdCnfCampoFormativo')->references('fi_IdCnfCampoFormativo')->on('tblCnf_CampoFormativo');
+      });
     }
 
     /**

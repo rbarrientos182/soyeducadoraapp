@@ -12,7 +12,11 @@ class CreateTblCatSistemaEscolar extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_SistemaEscolar', function (Blueprint $table) {
+          $table->increments('fi_IdCnfAlumnosTutores');
+          $table->string('fc_NombreSistemaEscolar',150);
+          $table->tinyInteger('fb_Activo');
+      });
     }
 
     /**

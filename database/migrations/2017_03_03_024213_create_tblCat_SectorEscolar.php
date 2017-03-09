@@ -12,7 +12,11 @@ class CreateTblCatSectorEscolar extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_SectorEscolar', function (Blueprint $table) {
+          $table->increments('fi_IdCatSectorEscolar');
+          $table->string('fc_NombreSector',45);
+          $table->tinyInteger('fb_Activo');
+      });
     }
 
     /**

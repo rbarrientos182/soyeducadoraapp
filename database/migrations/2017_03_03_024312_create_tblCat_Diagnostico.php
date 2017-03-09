@@ -12,7 +12,11 @@ class CreateTblCatDiagnostico extends Migration
      */
     public function up()
     {
-        //
+      Schema::create('tblCat_Diagnostico', function (Blueprint $table) {
+          $table->increments('fi_IdCatDiagnostico');
+          $table->integer('fi_NumeroPregunta');
+          $table->string('fc_Pregunta',150);
+      });
     }
 
     /**
