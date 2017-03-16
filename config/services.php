@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => App\User::class,
+        'model'  => SoyEducadora\User::class,
         'key' => '',
         'secret' => '',
     ],

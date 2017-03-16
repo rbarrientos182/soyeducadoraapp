@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace SoyEducadora\Http\Controllers\Auth;
 
-use App\User;
+use SoyEducadora\User;
 use Validator;
-use App\Http\Controllers\Controller;
+use SoyEducadora\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller

@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: SoyEducadora
+        psr4_prefix: SoyEducadora
         src_path: app
