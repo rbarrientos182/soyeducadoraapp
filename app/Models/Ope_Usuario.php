@@ -11,7 +11,8 @@ class Ope_Usuario extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'fc_Nombre','fc_ApPaterno','fc_Sexo',
+      'fi_IdCatPerfil','fc_Nombre','fc_ApPaterno','fc_ApMaterno','fc_Sexo',
+      'fc_PassWord','fc_correo','fi_idUsuarioFacebook',
     ];
 
     public function tblCat_Perfil()
