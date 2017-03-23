@@ -14,3 +14,17 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+
+
+
+/*
+|-------------------------------------------------------------------------
+| API RESTFUL
+|-------------------------------------------------------------------------
+*/
+
+Route::resource('Cat_Perfil','EndPoints\CatPerfilController');
+Route::resource('Cat_Perfil.Ope_Usuario','EndPoints\OpeUsuarioController');
