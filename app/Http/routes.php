@@ -26,5 +26,5 @@ Route::get('/', function () {
 |-------------------------------------------------------------------------
 */
 
-Route::resource('Cat_Perfil','EndPoints\CatPerfilController');
-Route::resource('Cat_Perfil.Ope_Usuario','EndPoints\OpeUsuarioController');
+Route::resource('cat_perfil','EndPoints\CatPerfilController');
+Route::resource('cat_perfil.ope_usuario','EndPoints\OpeUsuarioController');

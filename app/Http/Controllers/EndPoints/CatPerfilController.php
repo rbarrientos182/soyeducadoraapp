@@ -38,7 +38,8 @@ class CatPerfilController extends Controller
      */
     public function store(Request $request)
     {
-        return Cat_Perfil::create(Input::all());
+        Cat_Perfil::create($request->all());
+        return ['created'=> true];
     }
 
     /**
@@ -72,7 +73,9 @@ class CatPerfilController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Cat_Perfil::findOrFail($id)->update(Input::all());
+        $perfil = Cat_Perfil::findOrFail($id);
+        $perfil->update($request->all());
+        return ['updated' => true];
     }
 
     /**
@@ -83,6 +86,7 @@ class CatPerfilController extends Controller
      */
     public function destroy($id)
     {
-        Cat_Perfil::findOrFail($id)->delete();
+        Cat_Perfil::destroy($id);
+        return ['deleted' => true];
     }
 }

@@ -9,6 +9,7 @@ use SoyEducadora\Http\Controllers\Controller;
 use SoyEducadora\Models\Cat_Perfil;
 use SoyEducadora\Models\Ope_Usuario;
 
+
 class OpeUsuarioController extends Controller
 {
     /**
@@ -37,12 +38,13 @@ class OpeUsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $fi_IdCatPerfil)
     {
         $perfil = Cat_Perfil::findOrFail($fi_IdCatPerfil);
-        $input = Input::all();
+        $input = $request->all();
         $input['fi_IdCatPerfil'] = $perfil->fi_IdCatPerfil;
-        return Ope_Usuario::create($input);
+        Ope_Usuario::create($input);
+        return ['created'=> true];
     }
 
     /**
@@ -76,7 +78,9 @@ class OpeUsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Ope_Usuario::findOrFail($id)->update(Input::all());
+        $usuario = Ope_Usuario::findOrFail($id);
+        $usuario->update($request->all());
+        return ['update' => true];
     }
 
     /**
@@ -87,6 +91,7 @@ class OpeUsuarioController extends Controller
      */
     public function destroy($id)
     {
-        Ope_Usuario::findOrFail($id)->delete();
+        Ope_Usuario::destroy($id);
+        return ['deleted' => true];
     }
 }
