@@ -39,7 +39,10 @@ class OpeUsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $perfil = Cat_Perfil::findOrFail($fi_IdCatPerfil);
+        $input = Input::all();
+        $input['fi_IdCatPerfil'] = $perfil->fi_IdCatPerfil;
+        return Ope_Usuario::create($input);
     }
 
     /**
@@ -50,7 +53,7 @@ class OpeUsuarioController extends Controller
      */
     public function show($id)
     {
-        //
+        return Ope_Usuario::findOrFail($id);
     }
 
     /**
@@ -73,7 +76,7 @@ class OpeUsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Ope_Usuario::findOrFail($id)->update(Input::all());
     }
 
     /**
@@ -84,6 +87,6 @@ class OpeUsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Ope_Usuario::findOrFail($id)->delete();
     }
 }
