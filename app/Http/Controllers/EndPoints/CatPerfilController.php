@@ -17,7 +17,7 @@ class CatPerfilController extends Controller
      */
     public function index()
     {
-        return Cat_Perfil::all();
+      return Cat_Perfil::all();
     }
 
     /**
@@ -38,8 +38,35 @@ class CatPerfilController extends Controller
      */
     public function store(Request $request)
     {
+      //validamos que el request sea un array
+      if (!is_array($request->all())) {
+          return ['error' => 'request must be an array'];
+      }
+
+      // Creamos las reglas de validación
+      $rules = [
+        'fc_NombrePerfil' => 'required',
+        'fb_Activo' => 'required|boolean'
+      ];
+
+      try {
+        // Ejecutamos el validador, en caso de que falle devolvemos la respuesta
+        $validator = \Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+          return[
+            'created' => false,
+            'errors' => $validator->errors()->all()
+          ];
+        }
+
         Cat_Perfil::create($request->all());
         return ['created'=> true];
+
+      } catch (Exception $e) {
+        \Log::info('Error creating Cat_Perfil: '.$e);
+        return \Response::json(['created' => 'false'],500);
+
+      }
     }
 
     /**
@@ -50,7 +77,7 @@ class CatPerfilController extends Controller
      */
     public function show($id)
     {
-        return Cat_Perfil::findOrFail($id);
+      return Cat_Perfil::findOrFail($id);
     }
 
     /**
@@ -73,9 +100,37 @@ class CatPerfilController extends Controller
      */
     public function update(Request $request, $id)
     {
+      //validamos que el request sea un array
+      if (!is_array($request->all())) {
+          return ['error' => 'request must be an array'];
+      }
+
+      // Creamos las reglas de validación
+      $rules = [
+        'fc_NombrePerfil' => 'required',
+        'fb_Activo' => 'required|boolean'
+      ];
+
+      try {
+        // Ejecutamos el validador, en caso de que falle devolvemos la respuesta
+        $validator = \Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+          return[
+            'created' => false,
+            'errors' => $validator->errors()->all()
+          ];
+        }
+
         $perfil = Cat_Perfil::findOrFail($id);
         $perfil->update($request->all());
         return ['updated' => true];
+
+      } catch (Exception $e) {
+        \Log::info('Error creating Cat_Perfil: '.$e);
+        return \Response::json(['created' => 'false'],500);
+
+      }
+
     }
 
     /**
@@ -86,7 +141,8 @@ class CatPerfilController extends Controller
      */
     public function destroy($id)
     {
-        Cat_Perfil::destroy($id);
+        $perfil = Cat_Perfil::findOrFail($id);
+        $perfil->delete();
         return ['deleted' => true];
     }
 }

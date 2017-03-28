@@ -1,5 +1,5 @@
 <?php
-
+/*
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -45,4 +45,4 @@ class OpeUsuarioTest extends TestCase
         $data = array_merge($data, $custom);
         return $data;
     }
-}
+}*/

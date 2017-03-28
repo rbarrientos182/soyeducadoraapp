@@ -1,13 +1,13 @@
 <?php
 
-/*use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CatPerfilTest extends TestCase
 {
 
-    //use DatabaseMigrations;
+    use DatabaseMigrations;
     use WithoutMiddleware;
 
     public function testCatPerfilCreate()
@@ -24,10 +24,22 @@ class CatPerfilTest extends TestCase
 
         // Obtenemos los datos de dicho usuario modificado
         // y verificamos que el nombre sea el correcto
-        $this->get('cat_perfil/1')->seeJson(['fc_NombrePerfil' => 'Administrador']);
+
+        $this->get('/cat_perfil/1')->seeJson(['fc_NombrePerfil' => 'Administrador']);
 
         // Eliminamos al usuario
-        $this->delete('cat_perfil/1')->seeJson(['deleted' => true]);
+        $this->delete('/cat_perfil/1')->seeJson(['deleted' => true]);
+    }
+
+    public function testValidationErrorOnCreateCatPerfil()
+    {
+       $data = $this->getData(['fc_NombrePerfil' => '', 'fb_Activo' => '123']);
+       $this->post('/cat_perfil',$data)->dump();
+    }
+
+    public function testNotFoundCatPerfil()
+    {
+      $this->get('/cat_perfil/10')->seeJsonEquals(['error' => 'Model not found']);
     }
 
     public function getData($custom = array())
@@ -39,4 +51,5 @@ class CatPerfilTest extends TestCase
         $data = array_merge($data, $custom);
         return $data;
     }
-}*/
+
+}
