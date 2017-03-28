@@ -38,7 +38,7 @@ class OpeUsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $fi_IdCatPerfil)
+    public function store(Request $request,$fi_IdCatPerfil)
     {
         $perfil = Cat_Perfil::findOrFail($fi_IdCatPerfil);
         $input = $request->all();
@@ -80,7 +80,7 @@ class OpeUsuarioController extends Controller
     {
         $usuario = Ope_Usuario::findOrFail($id);
         $usuario->update($request->all());
-        return ['update' => true];
+        return ['updated' => true];
     }
 
     /**

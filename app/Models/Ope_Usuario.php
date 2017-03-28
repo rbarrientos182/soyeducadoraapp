@@ -12,7 +12,7 @@ class Ope_Usuario extends Model
 
     protected $fillable = [
       'fi_IdCatPerfil','fc_Nombre','fc_ApPaterno','fc_ApMaterno','fc_Sexo',
-      'fc_PassWord','fc_correo','fi_idUsuarioFacebook',
+      'fc_Password','fc_Correo','fi_idUsuarioFacebook',
     ];
 
     public function tblCat_Perfil()
