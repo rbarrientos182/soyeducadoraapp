@@ -71,7 +71,7 @@ class OpeUsuarioController extends Controller
           return ['created'=> true];
 
         } catch (Exception $e) {
-          \Log::info('Error creating Ope_Usuario: '.$e);
+          \Log::info('Error creating TblOpeUsuario: '.$e);
           return \Response::json(['created' => 'false'],500);
 
         }
@@ -138,7 +138,7 @@ class OpeUsuarioController extends Controller
         return ['updated' => true];
 
       } catch (Exception $e) {
-        \Log::info('Error updating Ope_Usuario: '.$e);
+        \Log::info('Error updating TblOpeUsuario: '.$e);
         return \Response::json(['updated' => 'false'],500);
       }
     }

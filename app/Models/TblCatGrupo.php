@@ -26,5 +26,29 @@ class TblCatGrupo extends Model
 
     protected $guarded = [];
 
-        
+    public function tblCat_ContextoPropio()
+    {
+      return $this->hasMany(TblCatContextoPropio::class,'fi_IdCatGrupo');
+    }
+
+    public function tblCnf_AlumnoGrupo()
+    {
+      return $this->hasMany(TblCnfAlumnoGrupo::class,'fi_IdCatGrupo');
+    }
+
+    public function tblOpe_NotaGrupal()
+    {
+      return $this->hasMany(TblOpeNotaGrupal::class,'fi_IdCatGrupo');
+    }
+
+    public function tbl_Ope_Usuario()
+    {
+      return $this->belongsTo(TblOpeUsuario::class);
+    }
+
+    public function tblCat_Escuela()
+    {
+      return $this->belongsTo(TblCatEscuela::class);
+    }
+
 }

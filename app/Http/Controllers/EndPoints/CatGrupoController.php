@@ -6,18 +6,20 @@ use Illuminate\Http\Request;
 
 use SoyEducadora\Http\Requests;
 use SoyEducadora\Http\Controllers\Controller;
-use SoyEducadora\Models\TblCatAlumno;
+use SoyEducadora\Models\TblOpeUsuario;
+use SoyEducadora\Models\TblCatEscuela;
+use SoyEducadora\Models\TblCatGrupo;
 
-class CatAlumnoController extends Controller
+class CatGrupoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($fi_IdOpeUsuario)
     {
-        return TblCatAlumno::all();
+        return TblCatGrupo::where('fi_IdOpeUsuario',$fi_IdOpeUsuario)->get();
     }
 
     /**
@@ -36,7 +38,7 @@ class CatAlumnoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $fi_IdOpeUsuario)
     {
       //validamos que el request sea un array
       if (!is_array($request->all())) {
@@ -45,12 +47,11 @@ class CatAlumnoController extends Controller
 
       // Creamos las reglas de validación
       $rules = [
-        'fc_Nombre' => 'required',
-        'fc_ApPaterno' => 'required',
-        'fc_Sexo' => 'required||max:1',
+        'fc_Grado' => 'required',
+        'fc_Grupo' => 'required',
         'fb_Activo' => 'required|boolean',
-        'fd_FecNacimiento' => 'required|date',
-        'fc_ContactoEmergencia' => 'required'
+        'fc_CicloEscolar' => 'required',
+        'fc_NombreEscuela' => 'required'
       ];
 
       try {
@@ -63,13 +64,39 @@ class CatAlumnoController extends Controller
           ];
         }
 
-        TblCatAlumno::create($request->all());
+        //buscamos el usuario que va agregar el grupo
+        $usuario = TblOpeUsuario::findOrFail($fi_IdOpeUsuario);
+        $input = $request->all();
+        $input['fi_IdOpeUsuario'] = $usuario->fi_IdOpeUsuario;
+
+        //realizamos una busqueda a escuela para si el nombre ya existe
+        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get()
+
+        // si la escuela existe se obtiene el id
+        if($escuela)
+        {
+            $input['fi_IdCatEscuela'] = $escuela->fi_IdCatEscuela;
+
+        }
+
+        // si no existe se agrega y se obtiene el id
+        else {
+
+            $school = new TblCatEscuela;
+            $school->fc_NombreEscuela = $request->fc_NombreEscuela;
+            $school->fc_Direccion = '';
+            $school->fi_IdOpeUsuario = $usuario->fi_IdOpeUsuario;
+            $school->save();
+            $input['fi_IdCatEscuela'] = $school->fi_IdCatEscuela;
+        }
+
+        //creamos el grupo
+        TblCatGrupo::create($input);
         return ['created'=> true];
 
       } catch (Exception $e) {
-        \Log::info('Error creating TblCatAlumno: '.$e);
+        \Log::info('Error creating TblCatGrupo: '.$e);
         return \Response::json(['created' => 'false'],500);
-
       }
 
     }
@@ -82,7 +109,7 @@ class CatAlumnoController extends Controller
      */
     public function show($id)
     {
-        return TblCatAlumno::findOrFail($id);
+        return TblCatGrupo::findOrFail($id);
     }
 
     /**
@@ -112,15 +139,15 @@ class CatAlumnoController extends Controller
 
       // Creamos las reglas de validación
       $rules = [
-        'fc_Nombre' => 'required',
-        'fc_ApPaterno' => 'required',
-        'fc_Sexo' => 'required||max:1',
+        'fc_Grado' => 'required',
+        'fc_Grupo' => 'required',
         'fb_Activo' => 'required|boolean',
-        'fd_FecNacimiento' => 'required|date',
-        'fc_ContactoEmergencia' => 'required'
+        'fc_CicloEscolar' => 'required',
+        'fc_NombreEscuela' => 'required'
       ];
 
       try {
+
         // Ejecutamos el validador, en caso de que falle devolvemos la respuesta
         $validator = \Validator::make($request->all(),$rules);
         if ($validator->fails()) {
@@ -130,13 +157,35 @@ class CatAlumnoController extends Controller
           ];
         }
 
-        $alumno = TblCatAlumno::findOrFail($id);
-        $alumno->update($request->all());
+        $input = $request->all();
+        //realizamos una busqueda a escuela para si el nombre ya existe
+        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get()
+
+        // si la escuela existe se obtiene el id
+        if($escuela)
+        {
+            $input['fi_IdCatEscuela'] = $escuela->fi_IdCatEscuela;
+
+        }
+
+        // si no existe se agrega y se obtiene el id
+        else {
+
+            $school = new TblCatEscuela;
+            $school->fc_NombreEscuela = $request->fc_NombreEscuela;
+            $school->fc_Direccion = '';
+            $school->fi_IdOpeUsuario = $usuario->fi_IdOpeUsuario;
+            $school->save();
+            $input['fi_IdCatEscuela'] = $school->fi_IdCatEscuela;
+        }
+
+
+        $grupo = TblCatGrupo::findOrFail($id);
+        $grupo->update($input);
         return ['updated' => true];
 
       } catch (Exception $e) {
-        \Log::info('Error updating TblCatAlumno: '.$e);
-        return \Response::json(['updated' => 'false'],500);
+
       }
 
     }
@@ -149,8 +198,8 @@ class CatAlumnoController extends Controller
      */
     public function destroy($id)
     {
-      $alumno = TblCatAlumno::findOrFail($id);
-      $alumno->delete();
+      $grupo = TblCatGrupo::findOrFail($id);
+      $grupo->delete();
       return ['deleted' => true];
     }
 }

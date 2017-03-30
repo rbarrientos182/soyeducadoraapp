@@ -24,3 +24,5 @@ Route::get('/', function () {
 
 Route::resource('cat_perfil','EndPoints\CatPerfilController');
 Route::resource('cat_perfil.ope_usuario','EndPoints\OpeUsuarioController');
+Route::resource('ope_usuario.cat_grupo','EndPoints\CatGrupoController');
+Route::resource('cat_alumno','EndPoints\CatAlumnoController');

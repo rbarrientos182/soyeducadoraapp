@@ -63,7 +63,7 @@ class CatPerfilController extends Controller
         return ['created'=> true];
 
       } catch (Exception $e) {
-        \Log::info('Error creating Cat_Perfil: '.$e);
+        \Log::info('Error creating TblCatPerfil: '.$e);
         return \Response::json(['created' => 'false'],500);
 
       }
@@ -121,12 +121,12 @@ class CatPerfilController extends Controller
           ];
         }
 
-        $perfil = Cat_Perfil::findOrFail($id);
+        $perfil = TblCatPerfil::findOrFail($id);
         $perfil->update($request->all());
         return ['updated' => true];
 
       } catch (Exception $e) {
-        \Log::info('Error updating Cat_Perfil: '.$e);
+        \Log::info('Error updating TblCatPerfil: '.$e);
         return \Response::json(['updated' => 'false'],500);
 
       }

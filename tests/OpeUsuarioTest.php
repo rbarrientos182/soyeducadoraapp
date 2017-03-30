@@ -36,6 +36,11 @@ class OpeUsuarioTest extends TestCase
        $this->post('/cat_perfil/1/ope_usuario/',$data)->dump();
     }
 
+    public function testNotFoundOpeUsuario()
+    {
+      $this->get('/cat_perfil/1/ope_usuario/10')->seeJsonEquals(['error' => 'Model not found']);
+    }
+
     public function getData($custom = array())
     {
       $data = [

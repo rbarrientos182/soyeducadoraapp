@@ -36,9 +36,9 @@ class TblCatAlumno extends Model
 
     protected $guarded = [];
 
-    public function tblCat_Tutores()
+    public function tblCnf_AlumnosTutores()
     {
-       return $this->belongsToMany(TblCatTutor::class,'fi_IdCatAlumno');
+       return $this->hasMany(TblCnfAlumnoTutor::class,'fi_IdCatAlumno');
     }
 
     public function tblCat_Ciudad()
