@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use SoyEducadora\Http\Requests;
 use SoyEducadora\Http\Controllers\Controller;
-use SoyEducadora\Models\Cat_Perfil;
+use SoyEducadora\Models\TblCatPerfil;
 
 class CatPerfilController extends Controller
 {
@@ -17,7 +17,7 @@ class CatPerfilController extends Controller
      */
     public function index()
     {
-      return Cat_Perfil::all();
+      return TblCatPerfil::all();
     }
 
     /**
@@ -59,7 +59,7 @@ class CatPerfilController extends Controller
           ];
         }
 
-        Cat_Perfil::create($request->all());
+        TblCatPerfil::create($request->all());
         return ['created'=> true];
 
       } catch (Exception $e) {
@@ -77,7 +77,7 @@ class CatPerfilController extends Controller
      */
     public function show($id)
     {
-      return Cat_Perfil::findOrFail($id);
+      return TblCatPerfil::findOrFail($id);
     }
 
     /**
@@ -116,7 +116,7 @@ class CatPerfilController extends Controller
         $validator = \Validator::make($request->all(),$rules);
         if ($validator->fails()) {
           return[
-            'created' => false,
+            'updated' => false,
             'errors' => $validator->errors()->all()
           ];
         }
@@ -126,8 +126,8 @@ class CatPerfilController extends Controller
         return ['updated' => true];
 
       } catch (Exception $e) {
-        \Log::info('Error creating Cat_Perfil: '.$e);
-        return \Response::json(['created' => 'false'],500);
+        \Log::info('Error updating Cat_Perfil: '.$e);
+        return \Response::json(['updated' => 'false'],500);
 
       }
 
@@ -141,7 +141,7 @@ class CatPerfilController extends Controller
      */
     public function destroy($id)
     {
-        $perfil = Cat_Perfil::findOrFail($id);
+        $perfil = TblCatPerfil::findOrFail($id);
         $perfil->delete();
         return ['deleted' => true];
     }

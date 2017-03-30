@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use SoyEducadora\Http\Requests;
 use SoyEducadora\Http\Controllers\Controller;
-use SoyEducadora\Models\Cat_Perfil;
-use SoyEducadora\Models\Ope_Usuario;
+use SoyEducadora\Models\TblCatPerfil;
+use SoyEducadora\Models\TblOpeUsuario;
 
 
 class OpeUsuarioController extends Controller
@@ -19,7 +19,7 @@ class OpeUsuarioController extends Controller
      */
     public function index($fi_IdCatPerfil)
     {
-        return Ope_Usuario::where('fi_IdCatPerfil',$fi_IdCatPerfil)->get();
+        return TblOpeUsuario::where('fi_IdCatPerfil',$fi_IdCatPerfil)->get();
     }
 
     /**
@@ -40,11 +40,42 @@ class OpeUsuarioController extends Controller
      */
     public function store(Request $request,$fi_IdCatPerfil)
     {
-        $perfil = Cat_Perfil::findOrFail($fi_IdCatPerfil);
-        $input = $request->all();
-        $input['fi_IdCatPerfil'] = $perfil->fi_IdCatPerfil;
-        Ope_Usuario::create($input);
-        return ['created'=> true];
+        //validamos que el request sea un array
+        if (!is_array($request->all())) {
+            return ['error' => 'request must be an array'];
+        }
+
+        // Creamos las reglas de validación
+        $rules = [
+          'fc_Nombre' => 'required',
+          'fc_ApPaterno' => 'required',
+          'fc_Sexo' => 'required|max:1',
+          'fc_Correo' => 'email',
+          'fc_Password' => 'min:6',
+          'fi_IdUsuarioFacebook' => 'numeric'
+        ];
+        try {
+          // Ejecutamos el validador, en caso de que falle devolvemos la respuesta
+          $validator = \Validator::make($request->all(),$rules);
+          if ($validator->fails()) {
+            return[
+              'created' => false,
+              'errors' => $validator->errors()->all()
+            ];
+          }
+
+          $perfil = TblCatPerfil::findOrFail($fi_IdCatPerfil);
+          $input = $request->all();
+          $input['fi_IdCatPerfil'] = $perfil->fi_IdCatPerfil;
+          TblOpeUsuario::create($input);
+          return ['created'=> true];
+
+        } catch (Exception $e) {
+          \Log::info('Error creating Ope_Usuario: '.$e);
+          return \Response::json(['created' => 'false'],500);
+
+        }
+
     }
 
     /**
@@ -55,7 +86,7 @@ class OpeUsuarioController extends Controller
      */
     public function show($id)
     {
-        return Ope_Usuario::findOrFail($id);
+        return TblOpeUsuario::findOrFail($id);
     }
 
     /**
@@ -78,9 +109,38 @@ class OpeUsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $usuario = Ope_Usuario::findOrFail($id);
+      //validamos que el request sea un array
+      if (!is_array($request->all())) {
+          return ['error' => 'request must be an array'];
+      }
+
+      // Creamos las reglas de validación
+      $rules = [
+        'fc_Nombre' => 'required',
+        'fc_ApPaterno' => 'required',
+        'fc_Sexo' => 'required|max:1',
+        'fc_Correo' => 'email',
+        'fc_Password' => 'min:6',
+        'fi_IdUsuarioFacebook' => 'numeric'
+      ];
+
+      try {
+        // Ejecutamos el validador, en caso de que falle devolvemos la respuesta
+        $validator = \Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+          return[
+            'updated' => false,
+            'errors' => $validator->errors()->all()
+          ];
+        }
+        $usuario = TblOpeUsuario::findOrFail($id);
         $usuario->update($request->all());
         return ['updated' => true];
+
+      } catch (Exception $e) {
+        \Log::info('Error updating Ope_Usuario: '.$e);
+        return \Response::json(['updated' => 'false'],500);
+      }
     }
 
     /**
@@ -91,7 +151,8 @@ class OpeUsuarioController extends Controller
      */
     public function destroy($id)
     {
-        Ope_Usuario::destroy($id);
-        return ['deleted' => true];
+      $user = TblOpeUsuario::findOrFail($id);
+      $user->delete();
+      return ['deleted' => true];
     }
 }
