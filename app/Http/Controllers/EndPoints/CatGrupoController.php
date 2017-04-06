@@ -70,7 +70,7 @@ class CatGrupoController extends Controller
         $input['fi_IdOpeUsuario'] = $usuario->fi_IdOpeUsuario;
 
         //realizamos una busqueda a escuela para si el nombre ya existe
-        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get()
+        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get();
 
         // si la escuela existe se obtiene el id
         if($escuela)
@@ -159,7 +159,7 @@ class CatGrupoController extends Controller
 
         $input = $request->all();
         //realizamos una busqueda a escuela para si el nombre ya existe
-        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get()
+        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get();
 
         // si la escuela existe se obtiene el id
         if($escuela)
