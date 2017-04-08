@@ -1,0 +1,9 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API para soy educadora",
+        "version": "1.0.0"
+    },
+    "paths": {},
+    "definitions": {}
+}

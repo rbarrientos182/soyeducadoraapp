@@ -1,5 +1,13 @@
 <?php
+/**
+ * @SWG\Info(title="API para soy educadora", version="1.0.0")
+ */
 
+ /**
+  * @resource Example
+  *
+  * Longer description
+  */
 namespace SoyEducadora\Http\Controllers\EndPoints;
 
 use Illuminate\Http\Request;
