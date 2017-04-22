@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use SoyEducadora\Http\Requests;
 use SoyEducadora\Http\Controllers\Controller;
 use SoyEducadora\Models\TblCatAlumno;
+use SoyEducadora\Models\TblCnfAlumnoGrupo;
 
 class CatAlumnoController extends Controller
 {
@@ -48,6 +49,8 @@ class CatAlumnoController extends Controller
 
       // Creamos las reglas de validación
       $rules = [
+        'fi_IdCatGrupo' => 'required',
+        'fc_CicloEscolar' => 'required',
         'fc_Nombre' => 'required',
         'fc_ApPaterno' => 'required',
         'fc_Sexo' => 'required||max:1',
@@ -66,7 +69,28 @@ class CatAlumnoController extends Controller
           ];
         }
 
-        TblCatAlumno::create($request->all());
+        $alumno = new TblCatAlumno;
+        $alumno->fc_Nombre = $request->fc_Nombre;
+        $alumno->fc_ApPaterno = $request->fc_ApPaterno;
+        if (isset($request->fc_ApMaterno)) {
+          $alumno->fc_ApMaterno = $request->fc_ApMaterno;
+        }
+        $alumno->fc_Sexo = $request->fc_Sexo;
+        if (isset($request->Fotogradia)) {
+          $alumno->Fotogradia = $request->Fotogradia;
+        }
+        $alumno->fb_Activo = $request->fb_Activo;
+        $alumno->fc_FecNacimiento = $request->fc_FecNacimiento;
+        $alumno->fc_ContactoEmergencia = $request->fc_ContactoEmergencia;
+        $alumno->save();
+
+        $alumnogrupo = new TblCnfAlumnoGrupo;
+        $alumnogrupo->fc_CicloEscolar = $request->fc_CicloEscolar;
+        $alumnogrupo->fi_IdCatGrupo = $request->fi_IdCatGrupo;
+        $alumnogrupo->if_IdCatAlumno = $alumno->fi_IdCatAlumno;
+        $alumnogrupo->save();
+
+        //TblCatAlumno::create($request->all());
         return ['created'=> true];
 
       } catch (Exception $e) {
@@ -134,7 +158,20 @@ class CatAlumnoController extends Controller
         }
 
         $alumno = TblCatAlumno::findOrFail($id);
-        $alumno->update($request->all());
+        $alumno->fc_Nombre = $request->fc_Nombre;
+        $alumno->fc_ApPaterno = $request->fc_ApPaterno;
+        if (isset($request->fc_ApMaterno)) {
+          $alumno->fc_ApMaterno = $request->fc_ApMaterno;
+        }
+        $alumno->fc_Sexo = $request->fc_Sexo;
+        if (isset($request->Fotogradia)) {
+          $alumno->Fotogradia = $request->Fotogradia;
+        }
+        $alumno->fb_Activo = $request->fb_Activo;
+        $alumno->fc_FecNacimiento = $request->fc_FecNacimiento;
+        $alumno->fc_ContactoEmergencia = $request->fc_ContactoEmergencia;
+        $alumno->save();
+
         return ['updated' => true];
 
       } catch (Exception $e) {

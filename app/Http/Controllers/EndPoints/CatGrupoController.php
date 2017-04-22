@@ -91,8 +91,11 @@ class CatGrupoController extends Controller
         }
 
         //creamos el grupo
-        TblCatGrupo::create($input);
-        return ['created'=> true];
+        $grupo = TblCatGrupo;
+        $grupo->create($input);
+
+        return ['created'=> true,
+                'id' => $grupo->fi_IdCatGrupo];
 
       } catch (Exception $e) {
         \Log::info('Error creating TblCatGrupo: '.$e);

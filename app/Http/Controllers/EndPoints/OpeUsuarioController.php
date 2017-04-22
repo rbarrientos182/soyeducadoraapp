@@ -67,8 +67,12 @@ class OpeUsuarioController extends Controller
           $perfil = TblCatPerfil::findOrFail($fi_IdCatPerfil);
           $input = $request->all();
           $input['fi_IdCatPerfil'] = $perfil->fi_IdCatPerfil;
-          TblOpeUsuario::create($input);
-          return ['created'=> true];
+          $user = new TblOpeUsuario;
+          $user->create($input);
+          //TblOpeUsuario::create($input);
+          //$user = TblOpeUsuario::all();
+          return ['created'=> true,
+                  'id' => $user->fi_IdOpeUsuario];
 
         } catch (Exception $e) {
           \Log::info('Error creating TblOpeUsuario: '.$e);
