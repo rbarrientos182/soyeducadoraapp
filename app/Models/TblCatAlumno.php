@@ -51,5 +51,10 @@ class TblCatAlumno extends Model
        return $this->belongsTo(TblCatEstado::class,'fi_IdCatAlumno');
     }
 
+    public function tblCnf_AlumnoGrupo()
+    {
+       return $this->hasMany(TblCnfAlumnoGrupo::class,'fi_IdCatAlumno');
+    }
+
 
 }

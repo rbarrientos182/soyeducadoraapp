@@ -41,6 +41,11 @@ class TblCatGrupo extends Model
       return $this->hasMany(TblOpeNotaGrupal::class,'fi_IdCatGrupo');
     }
 
+    public function tblCnf_AlumnoGrupo()
+    {
+      return $this->hasMany(TblCnfAlumnoGrupo::class,'fi_IdCatGrupo');
+    }
+
     public function tbl_Ope_Usuario()
     {
       return $this->belongsTo(TblOpeUsuario::class);

@@ -11,6 +11,7 @@ use SoyEducadora\Http\Requests;
 use SoyEducadora\Http\Controllers\Controller;
 use SoyEducadora\Models\TblCatAlumno;
 use SoyEducadora\Models\TblCnfAlumnoGrupo;
+use SoyEducadora\Models\TblCatGrupo;
 
 class CatAlumnoController extends Controller
 {
@@ -19,9 +20,22 @@ class CatAlumnoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        return TblCatAlumno::all();
+        $grupo = TblCatGrupo::findOrFail($id);
+
+        if($grupo->tblCnf_AlumnoGrupo){
+          $alumnogrupo = $grupo->tblCnf_AlumnoGrupo;
+          if($alumnogrupo->tblCat_Alumnos)
+          {
+            $alumnos = $alumnogrupo->tblCat_Alumnos;
+          }
+        }
+        else {
+          $alumnos = "";
+        }
+
+        return compact('alumnos');
     }
 
     /**
