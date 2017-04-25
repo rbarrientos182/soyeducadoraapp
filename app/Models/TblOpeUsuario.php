@@ -2,18 +2,24 @@
 
 namespace SoyEducadora\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * Class TblOpeUsuario
  */
-class TblOpeUsuario extends Model
+class TblOpeUsuario extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
+    use Authenticatable, CanResetPassword;
+
     protected $table = 'tblOpe_Usuario';
 
     protected $primaryKey = 'fi_IdOpeUsuario';
 
-	public $timestamps = false;
+	  public $timestamps = false;
 
     protected $fillable = [
         'fc_Nombre',
@@ -30,6 +36,8 @@ class TblOpeUsuario extends Model
     ];
 
     protected $guarded = [];
+
+    protected $hidden = ['fc_Password', 'remember_token'];
 
     public function tblCat_Perfil()
     {

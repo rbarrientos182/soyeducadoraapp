@@ -26,6 +26,7 @@ class CreateTblOpeUsuarioTable extends Migration {
 			$table->integer('fi_IdUsuarioFacebook')->nullable();
 			$table->string('fc_UserName', 45)->nullable();
 			$table->string('fc_UrlImagen', 45)->nullable();
+			$table->rememberToken();
 		});
 	}
 
