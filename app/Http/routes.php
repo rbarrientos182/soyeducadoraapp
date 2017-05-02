@@ -34,6 +34,8 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
   Route::resource('cat_perfil','EndPoints\CatPerfilController');
   Route::resource('cat_perfil.ope_usuario','EndPoints\OpeUsuarioController');
+  Route::post('ope_usuario/login','EndPoints\OpeUsuarioController@login');
+  Route::post('ope_usuario/loginFacebook','EndPoints\OpeUsuarioController@loginFacebook');
   Route::resource('ope_usuario.cat_grupo','EndPoints\CatGrupoController');
-  Route::resource('cat_alumno','EndPoints\CatAlumnoController');
+  Route::resource('cat_grupo.cat_alumno','EndPoints\CatAlumnoController');
 });

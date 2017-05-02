@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class OpeUsuarioController extends Controller
 {
-    use AuthenticatesAndRegistersUsers;
     /**
      * Display a listing of the resource.
      *
@@ -51,8 +50,8 @@ class OpeUsuarioController extends Controller
           'fc_Nombre' => 'required',
           'fc_ApPaterno' => 'required',
           'fc_Sexo' => 'required|max:1',
-          'fc_Correo' => 'email',
-          'fc_Password' => 'min:6',
+          'email' => 'email',
+          'password' => 'min:6',
           'fi_IdUsuarioFacebook' => 'numeric'
         ];
         try {
@@ -68,33 +67,34 @@ class OpeUsuarioController extends Controller
           $perfil = TblCatPerfil::findOrFail($fi_IdCatPerfil);
 
           $user = new TblOpeUsuario;
-          $user->fc_Nombre = $request->fc_Nombre;
-          $user->fc_ApPaterno = $request->fc_ApPaterno;
+          $user->fc_Nombre = $request->fc_Nombre;//1
+          $user->fc_ApPaterno = $request->fc_ApPaterno;//2
           if(isset($request->fc_ApMaterno)) {
-            $user->fc_ApMaterno = $request->fc_ApMaterno;
+            $user->fc_ApMaterno = $request->fc_ApMaterno;//3
           }
-          $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;
-          $user->fc_Sexo = $request->fc_Sexo;
-          if(isset($request->fc_Password)) {
-            $user->Password = bcrypt($request->fc_Password);
+          $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;//4
+          $user->fc_Sexo = $request->fc_Sexo;//5
+          if(isset($request->password)) {
+            $user->password = bcrypt($request->password);//6
           }
-          if(isset($request->Correo)) {
-            $user->Correo = $request->fc_Correo;
+          if(isset($request->email)) {
+            $user->email = $request->email;//7
           }
           if(isset($request->fb_UsuarioLocal)) {
-            $user->fb_UsuarioLocal = $request->fb_UsuarioLocal;
+            $user->fb_UsuarioLocal = $request->fb_UsuarioLocal;//8
           }
           if(isset($request->fi_IdUsuarioFacebook)) {
-            $user->fi_IdUsuarioFacebook = $request->fi_IdUsuarioFacebook;
+            $user->fi_IdUsuarioFacebook = $request->fi_IdUsuarioFacebook;//9
           }
           if(isset($request->fc_UserName)) {
-            $user->fc_UserName = $request->fc_UserName;
+            $user->fc_UserName = $request->fc_UserName;//10
           }
           if(isset($request->fc_UrlImagen)) {
-            $user->fc_UrlImagen = $request->fc_UrlImagen;
+            $user->fc_UrlImagen = $request->fc_UrlImagen;//11
           }
           $user->remember_token = str_random(10);
           $user->save();
+
           return ['created'=> true,
                   'id' => $user->fi_IdOpeUsuario];
 
@@ -147,8 +147,8 @@ class OpeUsuarioController extends Controller
         'fc_Nombre' => 'required',
         'fc_ApPaterno' => 'required',
         'fc_Sexo' => 'required|max:1',
-        'fc_Correo' => 'email',
-        'fc_Password' => 'min:6',
+        'email' => 'email',
+        'password' => 'min:6',
         'fi_IdUsuarioFacebook' => 'numeric'
       ];
 
@@ -162,30 +162,30 @@ class OpeUsuarioController extends Controller
           ];
         }
         $user = TblOpeUsuario::findOrFail($id);
-        $user->fc_Nombre = $request->fc_Nombre;
-        $user->fc_ApPaterno = $request->fc_ApPaterno;
+        $user->fc_Nombre = $request->fc_Nombre;//1
+        $user->fc_ApPaterno = $request->fc_ApPaterno;//2
         if(isset($request->fc_ApMaterno)) {
-          $user->fc_ApMaterno = $request->fc_ApMaterno;
+          $user->fc_ApMaterno = $request->fc_ApMaterno;//3
         }
-        $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;
-        $user->fc_Sexo = $request->fc_Sexo;
-        if(isset($request->fc_Password)) {
-          $user->Password = bcrypt($request->fc_Password);
+        $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;//4
+        $user->fc_Sexo = $request->fc_Sexo;//5
+        if(isset($request->password)) {
+          $user->password = bcrypt($request->password);//6
         }
-        if(isset($request->Correo)) {
-          $user->Correo = $request->fc_Correo;
+        if(isset($request->email)) {
+          $user->email = $request->email;//7
         }
         if(isset($request->fb_UsuarioLocal)) {
-          $user->fb_UsuarioLocal = $request->fb_UsuarioLocal;
+          $user->fb_UsuarioLocal = $request->fb_UsuarioLocal;//8
         }
         if(isset($request->fi_IdUsuarioFacebook)) {
-          $user->fi_IdUsuarioFacebook = $request->fi_IdUsuarioFacebook;
+          $user->fi_IdUsuarioFacebook = $request->fi_IdUsuarioFacebook;//9
         }
         if(isset($request->fc_UserName)) {
-          $user->fc_UserName = $request->fc_UserName;
+          $user->fc_UserName = $request->fc_UserName;//10
         }
         if(isset($request->fc_UrlImagen)) {
-          $user->fc_UrlImagen = $request->fc_UrlImagen;
+          $user->fc_UrlImagen = $request->fc_UrlImagen;//11
         }
         $user->save();
         return ['updated' => true];
@@ -216,8 +216,8 @@ class OpeUsuarioController extends Controller
         }
 
         $rules = [
-          'fc_Correo' => 'required|email',
-          'fc_Password' => 'required|min:6',
+          'email' => 'required|email',
+          'password' => 'required|min:6',
         ];
 
         try {
@@ -230,23 +230,68 @@ class OpeUsuarioController extends Controller
             ];
           }
 
-          $user = Auth::attempt($request->only(['fc_Correo','fc_Password']));
-          // si el usuario no existe redireccionamos a la vista login
-          if(!$user) {
+
+          // si el usuario no existe mandamos mensaje de error
+          if(!Auth::attempt($request->only(['email','password']))) {
               return[
                 'login' => false,
                 'errors' => 'No encontramos al usuario'
               ];
           }
           // en caso contrario significa que el usuario existe y mandamos a home
-          return $user;
+          $user = Auth::user();
+          return[
+            'login' => true,
+            'usuario' => $user
+          ];
         } catch (Exception $e) {
-          \Log::info('Error updating TblOpeUsuario: '.$e);
+          \Log::info('Error login TblOpeUsuario: '.$e);
           return \Response::json(['login' => 'false'],500);
 
         }
+    }
 
+    public function loginFacebook(request $request)
+    {
+      if (!is_array($request->all())) {
+          return ['error' => 'request must be an array'];
+      }
 
+      $rules = [
+        'fi_IdUsuarioFacebook' => 'required',
+      ];
+      try {
+
+        $validator = \Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+          return[
+            'login' => false,
+            'errors' => $validator->errors()->all()
+          ];
+        }
+
+        $user = TblOpeUsuario::where('fi_IdUsuarioFacebook',$request->fi_IdUsuarioFacebook);
+
+        if($user){
+
+          return[
+            'login' => true,
+            'usuario' => $user
+          ];
+        }
+        else{
+          return[
+            'login' => false,
+            'errors' => 'No encontramos al usuario'
+          ];
+
+        }
+
+      } catch (Exception $e) {
+        \Log::info('Error login TblOpeUsuario: '.$e);
+        return \Response::json(['login' => 'false'],500);
+
+      }
 
     }
 }

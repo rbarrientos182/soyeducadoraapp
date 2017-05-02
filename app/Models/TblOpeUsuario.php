@@ -2,19 +2,12 @@
 
 namespace SoyEducadora\Models;
 
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
 /**
  * Class TblOpeUsuario
  */
-class TblOpeUsuario extends Model implements AuthenticatableContract, CanResetPasswordContract
+class TblOpeUsuario extends Model
 {
-    use Authenticatable, CanResetPassword;
-
     protected $table = 'tblOpe_Usuario';
 
     protected $primaryKey = 'fi_IdOpeUsuario';
@@ -32,12 +25,13 @@ class TblOpeUsuario extends Model implements AuthenticatableContract, CanResetPa
         'fb_UsuarioLocal',
         'fi_IdUsuarioFacebook',
         'fc_UserName',
-        'fc_UrlImagen'
+        'fc_UrlImagen',
+        'remember_token'
     ];
 
     protected $guarded = [];
 
-    protected $hidden = ['fc_Password', 'remember_token'];
+    //protected $hidden = ['fc_Password', 'remember_token'];
 
     public function tblCat_Perfil()
     {

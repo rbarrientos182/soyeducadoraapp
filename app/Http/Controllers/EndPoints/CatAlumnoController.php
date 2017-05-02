@@ -20,22 +20,23 @@ class CatAlumnoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($fi_IdCatGrupo)
     {
-        $grupo = TblCatGrupo::findOrFail($id);
+      $grupo = TblCatGrupo::findOrFail($fi_IdCatGrupo);
 
-        if($grupo->tblCnf_AlumnoGrupo){
-          $alumnogrupo = $grupo->tblCnf_AlumnoGrupo;
-          if($alumnogrupo->tblCat_Alumnos)
-          {
-            $alumnos = $alumnogrupo->tblCat_Alumnos;
-          }
+      if($grupo->tblCnf_AlumnoGrupo){
+        $alumnogrupo = $grupo->tblCnf_AlumnoGrupo;
+        if($alumnogrupo->tblCat_Alumnos)
+        {
+          $alumnos = $alumnogrupo->tblCat_Alumnos;
         }
-        else {
-          $alumnos = "";
-        }
+      }
+      else {
+        $alumnos = "";
+      }
 
-        return compact('alumnos');
+      return compact('alumnos');
+
     }
 
     /**
@@ -54,7 +55,7 @@ class CatAlumnoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$fi_IdCatGrupo)
     {
       //validamos que el request sea un array
       if (!is_array($request->all())) {
@@ -63,7 +64,6 @@ class CatAlumnoController extends Controller
 
       // Creamos las reglas de validación
       $rules = [
-        'fi_IdCatGrupo' => 'required',
         'fc_CicloEscolar' => 'required',
         'fc_Nombre' => 'required',
         'fc_ApPaterno' => 'required',
@@ -100,7 +100,7 @@ class CatAlumnoController extends Controller
 
         $alumnogrupo = new TblCnfAlumnoGrupo;
         $alumnogrupo->fc_CicloEscolar = $request->fc_CicloEscolar;
-        $alumnogrupo->fi_IdCatGrupo = $request->fi_IdCatGrupo;
+        $alumnogrupo->fi_IdCatGrupo = $fi_IdCatGrupo;
         $alumnogrupo->if_IdCatAlumno = $alumno->fi_IdCatAlumno;
         $alumnogrupo->save();
 
@@ -206,5 +206,23 @@ class CatAlumnoController extends Controller
       $alumno = TblCatAlumno::findOrFail($id);
       $alumno->delete();
       return ['deleted' => true];
+    }
+
+    public function getAlumnos($id)
+    {
+      $grupo = TblCatGrupo::findOrFail($id);
+
+      if($grupo->tblCnf_AlumnoGrupo){
+        $alumnogrupo = $grupo->tblCnf_AlumnoGrupo;
+        if($alumnogrupo->tblCat_Alumnos)
+        {
+          $alumnos = $alumnogrupo->tblCat_Alumnos;
+        }
+      }
+      else {
+        $alumnos = "";
+      }
+
+      return compact('alumnos');
     }
 }
