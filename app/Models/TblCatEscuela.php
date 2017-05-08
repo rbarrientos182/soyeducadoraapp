@@ -28,10 +28,17 @@ class TblCatEscuela extends Model
       return $this->hasMany(TblCnfTelefonoEscuela::class,'fi_IdCatEscuela');
     }
 
+    public function tblCat_Grupos()
+    {
+      return $this->hasmany(TblCatGrupo::class,'fi_IdCatEscuela');
+    }
+
     public function tblOpe_Usuario()
     {
       return $this->belongsTo(TblOpeUsuario::class);
     }
+
+
 
 
 }

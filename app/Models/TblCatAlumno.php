@@ -41,20 +41,19 @@ class TblCatAlumno extends Model
        return $this->hasMany(TblCnfAlumnoTutor::class,'fi_IdCatAlumno');
     }
 
+    public function tblCat_Grupos()
+    {
+       return $this->belongsToMany(TblCatGrupo::class,'tblCnf_AlumnoGrupo','fi_IdCatGrupo','fi_IdCatAlumno')->withPivot('fc_CicloEscolar');
+    }
+
     public function tblCat_Ciudad()
     {
-       return $this->belongsTo(TblCatCiudad::class,'fi_IdCatAlumno');
+       return $this->belongsTo(TblCatCiudad::class);
     }
 
     public function tblCat_Estado()
     {
-       return $this->belongsTo(TblCatEstado::class,'fi_IdCatAlumno');
+       return $this->belongsTo(TblCatEstado::class);
     }
-
-    public function tblCnf_AlumnoGrupo()
-    {
-       return $this->hasMany(TblCnfAlumnoGrupo::class,'fi_IdCatAlumno');
-    }
-
 
 }

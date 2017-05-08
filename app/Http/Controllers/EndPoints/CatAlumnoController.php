@@ -23,13 +23,8 @@ class CatAlumnoController extends Controller
     public function index($fi_IdCatGrupo)
     {
       $grupo = TblCatGrupo::findOrFail($fi_IdCatGrupo);
-
-      if($grupo->tblCnf_AlumnoGrupo){
-        $alumnogrupo = $grupo->tblCnf_AlumnoGrupo;
-        if($alumnogrupo->tblCat_Alumnos)
-        {
-          $alumnos = $alumnogrupo->tblCat_Alumnos;
-        }
+      if($alumnos = $grupo->tblCat_Alumnos){
+        $alumnos = $grupo->tblCat_Alumnos;
       }
       else {
         $alumnos = "";
@@ -94,18 +89,19 @@ class CatAlumnoController extends Controller
           $alumno->Fotogradia = $request->Fotogradia;
         }
         $alumno->fb_Activo = $request->fb_Activo;
-        $alumno->fc_FecNacimiento = $request->fc_FecNacimiento;
+        $alumno->fd_FecNacimiento = $request->fd_FecNacimiento;
         $alumno->fc_ContactoEmergencia = $request->fc_ContactoEmergencia;
         $alumno->save();
 
         $alumnogrupo = new TblCnfAlumnoGrupo;
         $alumnogrupo->fc_CicloEscolar = $request->fc_CicloEscolar;
         $alumnogrupo->fi_IdCatGrupo = $fi_IdCatGrupo;
-        $alumnogrupo->if_IdCatAlumno = $alumno->fi_IdCatAlumno;
+        $alumnogrupo->fi_IdCatAlumno = $alumno->fi_IdCatAlumno;
         $alumnogrupo->save();
 
         //TblCatAlumno::create($request->all());
-        return ['created'=> true];
+        return ['created'=> true,
+              'id' => $alumnogrupo->fi_IdCatAlumno];
 
       } catch (Exception $e) {
         \Log::info('Error creating TblCatAlumno: '.$e);
@@ -121,9 +117,9 @@ class CatAlumnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$id2)
     {
-        return TblCatAlumno::findOrFail($id);
+        return TblCatAlumno::findOrFail($id2);
     }
 
     /**
@@ -144,7 +140,7 @@ class CatAlumnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $id2)
     {
       //validamos que el request sea un array
       if (!is_array($request->all())) {
@@ -171,7 +167,7 @@ class CatAlumnoController extends Controller
           ];
         }
 
-        $alumno = TblCatAlumno::findOrFail($id);
+        $alumno = TblCatAlumno::findOrFail($id2);
         $alumno->fc_Nombre = $request->fc_Nombre;
         $alumno->fc_ApPaterno = $request->fc_ApPaterno;
         if (isset($request->fc_ApMaterno)) {
@@ -182,7 +178,7 @@ class CatAlumnoController extends Controller
           $alumno->Fotogradia = $request->Fotogradia;
         }
         $alumno->fb_Activo = $request->fb_Activo;
-        $alumno->fc_FecNacimiento = $request->fc_FecNacimiento;
+        $alumno->fd_FecNacimiento = $request->fd_FecNacimiento;
         $alumno->fc_ContactoEmergencia = $request->fc_ContactoEmergencia;
         $alumno->save();
 
@@ -201,9 +197,9 @@ class CatAlumnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,$id2)
     {
-      $alumno = TblCatAlumno::findOrFail($id);
+      $alumno = TblCatAlumno::findOrFail($id2);
       $alumno->delete();
       return ['deleted' => true];
     }

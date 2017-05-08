@@ -48,8 +48,6 @@ class OpeUsuarioController extends Controller
         // Creamos las reglas de validación
         $rules = [
           'fc_Nombre' => 'required',
-          'fc_ApPaterno' => 'required',
-          'fc_Sexo' => 'required|max:1',
           'email' => 'email',
           'password' => 'min:6',
           'fi_IdUsuarioFacebook' => 'numeric'
@@ -68,29 +66,27 @@ class OpeUsuarioController extends Controller
 
           $user = new TblOpeUsuario;
           $user->fc_Nombre = $request->fc_Nombre;//1
-          $user->fc_ApPaterno = $request->fc_ApPaterno;//2
-          if(isset($request->fc_ApMaterno)) {
-            $user->fc_ApMaterno = $request->fc_ApMaterno;//3
+          $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;//2
+          if(isset($request->fc_Sexo)) {
+            $user->fc_Sexo = $request->fc_Sexo;//3
           }
-          $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;//4
-          $user->fc_Sexo = $request->fc_Sexo;//5
           if(isset($request->password)) {
-            $user->password = bcrypt($request->password);//6
+            $user->password = bcrypt($request->password);//4
           }
           if(isset($request->email)) {
-            $user->email = $request->email;//7
+            $user->email = $request->email;//5
           }
           if(isset($request->fb_UsuarioLocal)) {
-            $user->fb_UsuarioLocal = $request->fb_UsuarioLocal;//8
+            $user->fb_UsuarioLocal = $request->fb_UsuarioLocal;//6
           }
           if(isset($request->fi_IdUsuarioFacebook)) {
-            $user->fi_IdUsuarioFacebook = $request->fi_IdUsuarioFacebook;//9
+            $user->fi_IdUsuarioFacebook = $request->fi_IdUsuarioFacebook;//7
           }
           if(isset($request->fc_UserName)) {
-            $user->fc_UserName = $request->fc_UserName;//10
+            $user->fc_UserName = $request->fc_UserName;//8
           }
           if(isset($request->fc_UrlImagen)) {
-            $user->fc_UrlImagen = $request->fc_UrlImagen;//11
+            $user->fc_UrlImagen = $request->fc_UrlImagen;//9
           }
           $user->remember_token = str_random(10);
           $user->save();
@@ -112,9 +108,9 @@ class OpeUsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$id2)
     {
-        return TblOpeUsuario::findOrFail($id);
+        return TblOpeUsuario::findOrFail($id2);
     }
 
     /**
@@ -135,7 +131,7 @@ class OpeUsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $id2)
     {
       //validamos que el request sea un array
       if (!is_array($request->all())) {
@@ -145,8 +141,6 @@ class OpeUsuarioController extends Controller
       // Creamos las reglas de validación
       $rules = [
         'fc_Nombre' => 'required',
-        'fc_ApPaterno' => 'required',
-        'fc_Sexo' => 'required|max:1',
         'email' => 'email',
         'password' => 'min:6',
         'fi_IdUsuarioFacebook' => 'numeric'
@@ -161,14 +155,15 @@ class OpeUsuarioController extends Controller
             'errors' => $validator->errors()->all()
           ];
         }
-        $user = TblOpeUsuario::findOrFail($id);
+
+        $perfil = TblCatPerfil::findOrFail($id);
+
+        $user = TblOpeUsuario::findOrFail($id2);
         $user->fc_Nombre = $request->fc_Nombre;//1
-        $user->fc_ApPaterno = $request->fc_ApPaterno;//2
-        if(isset($request->fc_ApMaterno)) {
-          $user->fc_ApMaterno = $request->fc_ApMaterno;//3
-        }
         $user->fi_IdCatPerfil = $perfil->fi_IdCatPerfil;//4
-        $user->fc_Sexo = $request->fc_Sexo;//5
+        if(isset($request->fc_Sexo)) {
+          $user->fc_Sexo = $request->fc_Sexo;//5
+        }
         if(isset($request->password)) {
           $user->password = bcrypt($request->password);//6
         }
@@ -202,9 +197,9 @@ class OpeUsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,$id2)
     {
-      $user = TblOpeUsuario::findOrFail($id);
+      $user = TblOpeUsuario::findOrFail($id2);
       $user->delete();
       return ['deleted' => true];
     }
@@ -270,9 +265,9 @@ class OpeUsuarioController extends Controller
           ];
         }
 
-        $user = TblOpeUsuario::where('fi_IdUsuarioFacebook',$request->fi_IdUsuarioFacebook);
+        $user = TblOpeUsuario::where('fi_IdUsuarioFacebook',$request->fi_IdUsuarioFacebook)->get();
 
-        if($user){
+        if(count($user)>0){
 
           return[
             'login' => true,

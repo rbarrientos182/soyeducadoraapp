@@ -9,6 +9,7 @@ use SoyEducadora\Http\Controllers\Controller;
 use SoyEducadora\Models\TblOpeUsuario;
 use SoyEducadora\Models\TblCatEscuela;
 use SoyEducadora\Models\TblCatGrupo;
+use DB;
 
 class CatGrupoController extends Controller
 {
@@ -19,7 +20,20 @@ class CatGrupoController extends Controller
      */
     public function index($fi_IdOpeUsuario)
     {
-        return TblCatGrupo::where('fi_IdOpeUsuario',$fi_IdOpeUsuario)->get();
+        //$grupo = TblCatGrupo::where('fi_IdOpeUsuario',$fi_IdOpeUsuario)->get();
+        $grupo = DB::table('tblCat_Grupos')
+        ->where('tblCat_Grupos.fi_IdOpeUsuario',$fi_IdOpeUsuario)
+        ->join('tblCat_Escuela','tblCat_Grupos.fi_IdCatEscuela','=','tblCat_Escuela.fi_IdCatEscuela')
+        ->select('tblCat_Grupos.*','tblCat_Escuela.fc_NombreEscuela')
+        ->get();
+        if(count($grupo)>0){
+          return $grupo;
+        }
+        else {
+          return[
+            'errors' => 'No encontramos grupos con ese usuario'
+          ];
+        }
     }
 
     /**
@@ -66,17 +80,16 @@ class CatGrupoController extends Controller
 
         //buscamos el usuario que va agregar el grupo
         $usuario = TblOpeUsuario::findOrFail($fi_IdOpeUsuario);
-        $input = $request->all();
-        $input['fi_IdOpeUsuario'] = $usuario->fi_IdOpeUsuario;
+        $idusuario = $usuario->fi_IdOpeUsuario;
+
 
         //realizamos una busqueda a escuela para si el nombre ya existe
-        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get();
+        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela)->first();
 
         // si la escuela existe se obtiene el id
         if($escuela)
         {
-            $input['fi_IdCatEscuela'] = $escuela->fi_IdCatEscuela;
-
+            $idescuela = $escuela->fi_IdCatEscuela;
         }
 
         // si no existe se agrega y se obtiene el id
@@ -87,12 +100,18 @@ class CatGrupoController extends Controller
             $school->fc_Direccion = '';
             $school->fi_IdOpeUsuario = $usuario->fi_IdOpeUsuario;
             $school->save();
-            $input['fi_IdCatEscuela'] = $school->fi_IdCatEscuela;
+            $idescuela = $school->fi_IdCatEscuela;
         }
 
         //creamos el grupo
-        $grupo = TblCatGrupo;
-        $grupo->create($input);
+        $grupo = new TblCatGrupo;
+        $grupo->fc_Grado = $request->fc_Grado;
+        $grupo->fc_Grupo = $request->fc_Grupo;
+        $grupo->fb_Activo = $request->fb_Activo;
+        $grupo->fc_CicloEscolar = $request->fc_CicloEscolar;
+        $grupo->fi_IdOpeUsuario = $idusuario;
+        $grupo->fi_IdCatEscuela = $idescuela;
+        $grupo->save();
 
         return ['created'=> true,
                 'id' => $grupo->fi_IdCatGrupo];
@@ -110,9 +129,11 @@ class CatGrupoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$id2)
     {
-        return TblCatGrupo::findOrFail($id);
+        $grupo = TblCatGrupo::findOrFail($id2);
+        $grupo->tblCat_Escuelas->fc_NombreEscuela;
+        return $grupo;
     }
 
     /**
@@ -133,7 +154,7 @@ class CatGrupoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $id2)
     {
       //validamos que el request sea un array
       if (!is_array($request->all())) {
@@ -159,19 +180,19 @@ class CatGrupoController extends Controller
             'errors' => $validator->errors()->all()
           ];
         }
+        //buscamos el usuario que va agregar el grupo
+        $usuario = TblOpeUsuario::findOrFail($id);
+        $idusuario = $usuario->fi_IdOpeUsuario;
 
-        $input = $request->all();
         //realizamos una busqueda a escuela para si el nombre ya existe
-        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela."%")->get();
+        $escuela = TblCatEscuela::where("fc_NombreEscuela","LIKE","\\".$request->fc_NombreEscuela)->first();
 
+        // si no existe se agrega y se obtiene el id
         // si la escuela existe se obtiene el id
         if($escuela)
         {
-            $input['fi_IdCatEscuela'] = $escuela->fi_IdCatEscuela;
-
+            $idescuela = $escuela->fi_IdCatEscuela;
         }
-
-        // si no existe se agrega y se obtiene el id
         else {
 
             $school = new TblCatEscuela;
@@ -179,12 +200,18 @@ class CatGrupoController extends Controller
             $school->fc_Direccion = '';
             $school->fi_IdOpeUsuario = $usuario->fi_IdOpeUsuario;
             $school->save();
-            $input['fi_IdCatEscuela'] = $school->fi_IdCatEscuela;
+            $idescuela = $school->fi_IdCatEscuela;
         }
 
-
-        $grupo = TblCatGrupo::findOrFail($id);
-        $grupo->update($input);
+        //creamos el grupo
+        $grupo =  TblCatGrupo::findOrFail($id2);
+        $grupo->fc_Grado = $request->fc_Grado;
+        $grupo->fc_Grupo = $request->fc_Grupo;
+        $grupo->fb_Activo = $request->fb_Activo;
+        $grupo->fc_CicloEscolar = $request->fc_CicloEscolar;
+        $grupo->fi_IdOpeUsuario = $idusuario;
+        $grupo->fi_IdCatEscuela = $idescuela;
+        $grupo->save();
         return ['updated' => true];
 
       } catch (Exception $e) {
@@ -199,9 +226,9 @@ class CatGrupoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,$id2)
     {
-      $grupo = TblCatGrupo::findOrFail($id);
+      $grupo = TblCatGrupo::findOrFail($id2);
       $grupo->delete();
       return ['deleted' => true];
     }
