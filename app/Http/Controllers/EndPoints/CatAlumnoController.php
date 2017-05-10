@@ -59,7 +59,6 @@ class CatAlumnoController extends Controller
 
       // Creamos las reglas de validación
       $rules = [
-        'fc_CicloEscolar' => 'required',
         'fc_Nombre' => 'required',
         'fc_ApPaterno' => 'required',
         'fc_Sexo' => 'required||max:1',
@@ -93,8 +92,10 @@ class CatAlumnoController extends Controller
         $alumno->fc_ContactoEmergencia = $request->fc_ContactoEmergencia;
         $alumno->save();
 
+        $grupo = TblCatGrupo::findOrFail($fi_IdCatGrupo);
+
         $alumnogrupo = new TblCnfAlumnoGrupo;
-        $alumnogrupo->fc_CicloEscolar = $request->fc_CicloEscolar;
+        $alumnogrupo->fc_CicloEscolar = $grupo->fc_CicloEscolar;
         $alumnogrupo->fi_IdCatGrupo = $fi_IdCatGrupo;
         $alumnogrupo->fi_IdCatAlumno = $alumno->fi_IdCatAlumno;
         $alumnogrupo->save();
