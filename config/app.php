@@ -143,6 +143,7 @@ return [
         SoyEducadora\Providers\AppServiceProvider::class,
         SoyEducadora\Providers\EventServiceProvider::class,
         SoyEducadora\Providers\RouteServiceProvider::class,
+        Acacha\AdminLTETemplateLaravel\app\Providers\AdminLTETemplateServiceProvider::class,
 
     ],
 
